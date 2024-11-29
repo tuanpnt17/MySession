@@ -1,32 +1,31 @@
-using System.Diagnostics;
-using Microsoft.AspNetCore.Mvc;
-using MySession.Models;
+namespace MySession.Controllers;
 
-namespace MySession.Controllers
+public class HomeController(ILogger<HomeController> logger) : Controller
 {
-    public class HomeController : Controller
+    private readonly ILogger<HomeController> _logger = logger;
+
+    public async Task<IActionResult> Index()
     {
-        private readonly ILogger<HomeController> _logger;
+        var session = HttpContext.GetSession();
+        session.SetString("Home", "Tuan Pham");
+        await session.CommitAsync();
 
-        public HomeController(ILogger<HomeController> logger)
-        {
-            _logger = logger;
-        }
+        return View();
+    }
 
-        public IActionResult Index()
-        {
-            return View();
-        }
+    public async Task<IActionResult> Privacy()
+    {
+        var session = HttpContext.GetSession();
+        await session.LoadAsync();
+        var homeName = session.GetString("Home");
+        return View("Privacy", homeName);
+    }
 
-        public IActionResult Privacy()
-        {
-            return View();
-        }
-
-        [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
-        public IActionResult Error()
-        {
-            return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
-        }
+    [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
+    public IActionResult Error()
+    {
+        return View(
+            new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier }
+        );
     }
 }
