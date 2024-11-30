@@ -1,21 +1,12 @@
+using MySession.Extensions;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
-var serviceCollection = builder.Services;
+var services = builder.Services;
 
-serviceCollection.AddControllersWithViews();
-
-serviceCollection.AddSingleton<IMySessionStorageEngine>(services =>
-{
-    var path = Path.Combine(
-        services.GetRequiredService<IHostEnvironment>().ContentRootPath,
-        "sessions"
-    );
-    Directory.CreateDirectory(path);
-
-    return new MySessionStorageEngine(path);
-});
-serviceCollection.AddSingleton<IMySessionStorage, MySessionStorage>();
+services.AddControllersWithViews();
+services.AddMySession();
 
 var app = builder.Build();
 

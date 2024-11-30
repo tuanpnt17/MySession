@@ -18,7 +18,7 @@ namespace MySession.Session
         public string Id => id;
         public IEnumerable<string> Keys => _store.Keys;
 
-        public async Task LoadAsync(CancellationToken cancellationToken = new CancellationToken())
+        public async Task LoadAsync(CancellationToken cancellationToken = new())
         {
             _store.Clear();
             var loadedStore = await engine.LoadAsync(id, cancellationToken);
@@ -28,7 +28,7 @@ namespace MySession.Session
             }
         }
 
-        public async Task CommitAsync(CancellationToken cancellationToken = new CancellationToken())
+        public async Task CommitAsync(CancellationToken cancellationToken = new())
         {
             await engine.CommitAsync(id, _store, cancellationToken);
         }

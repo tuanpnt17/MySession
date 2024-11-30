@@ -8,7 +8,12 @@ public class HomeController(ILogger<HomeController> logger) : Controller
     {
         var session = HttpContext.GetSession();
         session.SetString("Home", "Tuan Pham");
+
         await session.CommitAsync();
+
+        HttpContext.GetSession().SetInt32("Age", 21);
+
+        await HttpContext.GetSession().CommitAsync();
 
         return View();
     }
@@ -18,7 +23,9 @@ public class HomeController(ILogger<HomeController> logger) : Controller
         var session = HttpContext.GetSession();
         await session.LoadAsync();
         var homeName = session.GetString("Home");
-        return View("Privacy", homeName);
+        var age = session.GetInt32("Age");
+
+        return View("Privacy", (object)age!);
     }
 
     [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
