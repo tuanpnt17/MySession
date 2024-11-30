@@ -28,3 +28,5 @@ app.MapControllerRoute(name: "default", pattern: "{controller=Home}/{action=Inde
     .WithStaticAssets();
 
 app.Run();
+
+public partial class Program { }

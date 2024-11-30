@@ -4,12 +4,14 @@ namespace MySession.Controllers
 {
     public class TestController : Controller
     {
-        public IActionResult Index()
+        public async Task<IActionResult> IndexAsync()
         {
             var randomValue = Guid.NewGuid().ToString();
             var session = HttpContext.GetSession();
+            await session.LoadAsync();
+
             session.SetString("KEY", randomValue);
-            session.CommitAsync();
+            await session.CommitAsync();
             return View();
         }
 
